@@ -39,41 +39,42 @@ def sample(query: str, N: int = 10, tau: float = 0.7) -> SampleSet:
             response = requests.post(OLLAMA_URL, json=payload)
             response.raise_for_status()
             resp_json = response.json()
-            print("Response keys:", list(response.json().keys()))
-            print("Full response sample:", str(response.json())[:500])
             
             # Extract answer text
             answer = resp_json.get("response", "")
             samples.append(answer)
             
             # Process logprobs
-            logprobs_data = resp_json.get("logprobs", [])
-            if isinstance(logprobs_data, list) and len(logprobs_data) > 0:
-                token_dists = []
-                for entry in logprobs_data:
-                    token_dist = {}
-                    if isinstance(entry, dict) and "top_logprobs" in entry:
-                        top_logprobs = entry["top_logprobs"]
-                        if isinstance(top_logprobs, list):
-                            for item in top_logprobs:
-                                if isinstance(item, dict) and "token" in item and "logprob" in item:
-                                    try:
-                                        prob = math.exp(item["logprob"])
-                                        token_dist[item["token"]] = prob
-                                    except (ValueError, OverflowError):
-                                        pass
-                    
-                    # Normalize token distribution
-                    if token_dist:
-                        total_prob = sum(token_dist.values())
-                        if total_prob > 0:
-                            for tok in token_dist:
-                                token_dist[tok] /= total_prob
-                            token_dists.append(token_dist)
-                        else:
-                            token_dists.append({})
-                    else:
-                        token_dists.append({})
+            logprob_data = resp_json.get("logprobs", [])
+            
+            # Handle dict format
+            if isinstance(logprob_data, dict):
+                logprob_data = logprob_data.get("content", [])
+
+            # Handle list of token objects  
+            token_dists = []
+            if isinstance(logprob_data, list) and len(logprob_data) > 0:
+                for token_entry in logprob_data:
+                    dist = {}
+                    # Try top_logprobs first
+                    top = token_entry.get("top_logprobs", [])
+                    if top:
+                        for item in top:
+                            tok = item.get("token", "")
+                            lp  = item.get("logprob", -10)
+                            if tok:
+                                dist[tok] = math.exp(lp)
+                    # Fallback: use the single token
+                    if not dist:
+                        tok = token_entry.get("token", "")
+                        lp  = token_entry.get("logprob", -10)
+                        if tok:
+                            dist[tok] = math.exp(lp)
+                    # Normalize
+                    total = sum(dist.values())
+                    if total > 0:
+                        dist = {k: v/total for k, v in dist.items()}
+                    token_dists.append(dist)
                 
                 logprobs.append(token_dists)
             else:

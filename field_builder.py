@@ -8,12 +8,12 @@ from zone_classifier import classify_all, print_field
 class KAIROSField:
     query: str
     answer: str
+    total_claims: int
+    N_samples: int
     records: list[dict] = field(default_factory=list)
     fault_lines: list[dict] = field(default_factory=list)
     gradients: list[dict] = field(default_factory=list)
     solid: list[dict] = field(default_factory=list)
-    total_claims: int
-    N_samples: int
 
 def build_kairos_field(query: str,
                        N: int = 5,

@@ -58,6 +58,16 @@ def compute_H_e_norm(sample_set: SampleSet, t: int, vocab_size: int = 32000) -> 
     """
     Computes normalized epistemic entropy at token position t.
     """
+    logprobs_list = sample_set.logprobs
+    print("DEBUG logprobs_list length:", len(logprobs_list))
+    if len(logprobs_list) > 0:
+        print("DEBUG sample 0 length:", len(logprobs_list[0]))
+        if len(logprobs_list[0]) > 0:
+            print("DEBUG token 0 type:", 
+                  type(logprobs_list[0][0]))
+            print("DEBUG token 0 value:", 
+                  str(logprobs_list[0][0])[:200])
+                  
     # 1. mixture = compute_mixture(sample_set, t)
     mixture = compute_mixture(sample_set, t)
     
