@@ -39,6 +39,8 @@ def sample(query: str, N: int = 10, tau: float = 0.7) -> SampleSet:
             response = requests.post(OLLAMA_URL, json=payload)
             response.raise_for_status()
             resp_json = response.json()
+            print("Response keys:", list(response.json().keys()))
+            print("Full response sample:", str(response.json())[:500])
             
             # Extract answer text
             answer = resp_json.get("response", "")
@@ -82,7 +84,7 @@ def sample(query: str, N: int = 10, tau: float = 0.7) -> SampleSet:
             # Handle failures gracefully by appending empty values
             samples.append("")
             logprobs.append([])
-            print(f"Warning: logprobs not available for sample {i}")
+            print(f"Warning: logprobs not available for sample {i}. Exception: {e}")
             
     return SampleSet(query=query, samples=samples, logprobs=logprobs)
 

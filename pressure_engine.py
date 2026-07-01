@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from sampler import SampleSet
-from entropy_engine import claim_entropy
-from gradient_engine import compute_gradients
-from consistency_engine import compute_consistency
+
 
 @dataclass
 class UncertaintyRecord:
@@ -30,6 +28,10 @@ def compute_all_pressures(claims: list[str],
     Computes uncertainty pressure for all claims by combining epistemic entropy,
     structural gradients, and consistency scores.
     """
+    from entropy_engine import claim_entropy
+    from gradient_engine import compute_gradients
+    from consistency_engine import compute_consistency
+
     # Step 1 — Compute gradients for all claims at once:
     print("Computing gradients...")
     gradients = compute_gradients(claims, original_answer, query)
