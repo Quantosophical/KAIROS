@@ -4,53 +4,28 @@ import time
 questions = [
   {
     "question": "What is the boiling point of water at sea level?",
-    "ground_truth": "100 degrees Celsius or 212 degrees Fahrenheit",
+    "ground_truth": "100 degrees Celsius",
     "key_fact": "100"
   },
   {
-    "question": "Who wrote the play Hamlet?",
+    "question": "Who wrote Hamlet?",
     "ground_truth": "William Shakespeare",
     "key_fact": "Shakespeare"
   },
   {
-    "question": "What is the speed of light in a vacuum?",
-    "ground_truth": "approximately 299,792 kilometers per second",
-    "key_fact": "299"
-  },
-  {
-    "question": "What organ produces insulin in the human body?",
+    "question": "What organ produces insulin?",
     "ground_truth": "the pancreas",
     "key_fact": "pancreas"
-  },
-  {
-    "question": "What is the chemical formula for water?",
-    "ground_truth": "H2O",
-    "key_fact": "H2O"
-  },
-  {
-    "question": "In what year did World War Two end?",
-    "ground_truth": "1945",
-    "key_fact": "1945"
-  },
-  {
-    "question": "What is the largest planet in our solar system?",
-    "ground_truth": "Jupiter",
-    "key_fact": "Jupiter"
-  },
-  {
-    "question": "What gas do plants absorb during photosynthesis?",
-    "ground_truth": "carbon dioxide",
-    "key_fact": "carbon dioxide"
-  },
-  {
-    "question": "How many bones are in the adult human body?",
-    "ground_truth": "206 bones",
-    "key_fact": "206"
   },
   {
     "question": "What is the powerhouse of the cell?",
     "ground_truth": "the mitochondria",
     "key_fact": "mitochondria"
+  },
+  {
+    "question": "What gas do plants absorb during photosynthesis?",
+    "ground_truth": "carbon dioxide",
+    "key_fact": "carbon dioxide"
   },
 ]
 
@@ -95,7 +70,7 @@ def check_claim_against_fact(claim: str,
     return False  # Default: not wrong for prototype
                   # Human verification needed for paper
 
-def run_experiment(N_samples: int = 3) -> dict:
+def run_experiment(N_samples: int = 2) -> dict:
     print("=" * 60)
     print("  KAIROS FAULT LINE PREDICTION EXPERIMENT")
     print("=" * 60)
@@ -197,4 +172,4 @@ def run_experiment(N_samples: int = 3) -> dict:
     }
 
 if __name__ == "__main__":
-    results = run_experiment(N_samples=3)
+    results = run_experiment(N_samples=2)
